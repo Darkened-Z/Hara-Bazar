@@ -1,13 +1,10 @@
-import { createClient } from "@libsql/client";
-import { drizzle } from "drizzle-orm/libsql";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 import { hash } from "bcryptjs";
 import * as schema from "./schema";
 
 async function seed() {
-  const client = createClient({
-    url: process.env.TURSO_DATABASE_URL || "file:local.db",
-    authToken: process.env.TURSO_AUTH_TOKEN,
-  });
+  const client = postgres(process.env.DATABASE_URL!, { prepare: false });
   const db = drizzle(client, { schema });
 
   console.log("Seeding database...");
@@ -97,6 +94,7 @@ async function seed() {
   console.log("Customer login: 03211234567 / customer123");
   console.log("Seller login:   03001234567 / seller123");
 
+  await client.end();
   process.exit(0);
 }
 

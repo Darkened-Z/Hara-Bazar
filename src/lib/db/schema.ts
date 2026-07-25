@@ -1,21 +1,21 @@
-import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
+import { pgTable, serial, text, integer, boolean, real, timestamp, varchar } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
-export const users = sqliteTable("users", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email"),
   phone: text("phone").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
-  role: text("role", { enum: ["customer", "seller"] }).notNull().default("customer"),
+  role: varchar("role", { length: 20 }).notNull().default("customer"),
   city: text("city").default("Faisalabad"),
   avatarUrl: text("avatar_url"),
-  createdAt: text("created_at").notNull().$defaultFn(() => new Date().toISOString()),
-  updatedAt: text("updated_at").notNull().$defaultFn(() => new Date().toISOString()),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
-export const sellers = sqliteTable("sellers", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const sellers = pgTable("sellers", {
+  id: serial("id").primaryKey(),
   userId: integer("user_id").notNull().references(() => users.id),
   storeName: text("store_name").notNull(),
   storeSlug: text("store_slug").notNull().unique(),
@@ -26,23 +26,23 @@ export const sellers = sqliteTable("sellers", {
   bankName: text("bank_name"),
   accountNumber: text("account_number"),
   accountTitle: text("account_title"),
-  status: text("status", { enum: ["pending", "active", "suspended"] }).notNull().default("active"),
-  createdAt: text("created_at").notNull().$defaultFn(() => new Date().toISOString()),
+  status: varchar("status", { length: 20 }).notNull().default("active"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const categories = sqliteTable("categories", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const categories = pgTable("categories", {
+  id: serial("id").primaryKey(),
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
   abbreviation: text("abbreviation").notNull(),
   color: text("color").notNull(),
   imageUrl: text("image_url"),
   sortOrder: integer("sort_order").notNull().default(0),
-  isActive: integer("is_active", { mode: "boolean" }).notNull().default(true),
+  isActive: boolean("is_active").notNull().default(true),
 });
 
-export const products = sqliteTable("products", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const products = pgTable("products", {
+  id: serial("id").primaryKey(),
   sellerId: integer("seller_id").notNull().references(() => sellers.id),
   categoryId: integer("category_id").notNull().references(() => categories.id),
   name: text("name").notNull(),
@@ -52,39 +52,37 @@ export const products = sqliteTable("products", {
   comparePrice: integer("compare_price"),
   stock: integer("stock").notNull().default(0),
   sku: text("sku"),
-  status: text("status", { enum: ["active", "inactive", "pending"] }).notNull().default("active"),
+  status: varchar("status", { length: 20 }).notNull().default("active"),
   ratingAvg: real("rating_avg").default(0),
   totalReviews: integer("total_reviews").default(0),
   totalSold: integer("total_sold").default(0),
-  createdAt: text("created_at").notNull().$defaultFn(() => new Date().toISOString()),
-  updatedAt: text("updated_at").notNull().$defaultFn(() => new Date().toISOString()),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
-export const productImages = sqliteTable("product_images", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const productImages = pgTable("product_images", {
+  id: serial("id").primaryKey(),
   productId: integer("product_id").notNull().references(() => products.id, { onDelete: "cascade" }),
   url: text("url").notNull(),
   sortOrder: integer("sort_order").notNull().default(0),
 });
 
-export const addresses = sqliteTable("addresses", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const addresses = pgTable("addresses", {
+  id: serial("id").primaryKey(),
   userId: integer("user_id").notNull().references(() => users.id),
   label: text("label").notNull(),
   addressLine: text("address_line").notNull(),
   city: text("city").notNull().default("Faisalabad"),
   phone: text("phone").notNull(),
-  isDefault: integer("is_default", { mode: "boolean" }).notNull().default(false),
+  isDefault: boolean("is_default").notNull().default(false),
 });
 
-export const orders = sqliteTable("orders", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const orders = pgTable("orders", {
+  id: serial("id").primaryKey(),
   orderNumber: text("order_number").notNull().unique(),
   userId: integer("user_id").notNull().references(() => users.id),
   sellerId: integer("seller_id").notNull().references(() => sellers.id),
-  status: text("status", {
-    enum: ["pending", "confirmed", "processing", "shipped", "delivered", "cancelled"],
-  }).notNull().default("pending"),
+  status: varchar("status", { length: 20 }).notNull().default("pending"),
   subtotal: integer("subtotal").notNull(),
   deliveryFee: integer("delivery_fee").notNull().default(0),
   total: integer("total").notNull(),
@@ -92,12 +90,12 @@ export const orders = sqliteTable("orders", {
   deliveryAddress: text("delivery_address").notNull(),
   deliveryPhone: text("delivery_phone").notNull(),
   notes: text("notes"),
-  createdAt: text("created_at").notNull().$defaultFn(() => new Date().toISOString()),
-  updatedAt: text("updated_at").notNull().$defaultFn(() => new Date().toISOString()),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
-export const orderItems = sqliteTable("order_items", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const orderItems = pgTable("order_items", {
+  id: serial("id").primaryKey(),
   orderId: integer("order_id").notNull().references(() => orders.id, { onDelete: "cascade" }),
   productId: integer("product_id").notNull().references(() => products.id),
   productName: text("product_name").notNull(),
@@ -106,29 +104,29 @@ export const orderItems = sqliteTable("order_items", {
   totalPrice: integer("total_price").notNull(),
 });
 
-export const wishlist = sqliteTable("wishlist", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const wishlist = pgTable("wishlist", {
+  id: serial("id").primaryKey(),
   userId: integer("user_id").notNull().references(() => users.id),
   productId: integer("product_id").notNull().references(() => products.id),
-  createdAt: text("created_at").notNull().$defaultFn(() => new Date().toISOString()),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const reviews = sqliteTable("reviews", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const reviews = pgTable("reviews", {
+  id: serial("id").primaryKey(),
   userId: integer("user_id").notNull().references(() => users.id),
   productId: integer("product_id").notNull().references(() => products.id),
   orderId: integer("order_id").references(() => orders.id),
   rating: integer("rating").notNull(),
   comment: text("comment"),
-  createdAt: text("created_at").notNull().$defaultFn(() => new Date().toISOString()),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const cartItems = sqliteTable("cart_items", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const cartItems = pgTable("cart_items", {
+  id: serial("id").primaryKey(),
   userId: integer("user_id").notNull().references(() => users.id),
   productId: integer("product_id").notNull().references(() => products.id),
   quantity: integer("quantity").notNull().default(1),
-  createdAt: text("created_at").notNull().$defaultFn(() => new Date().toISOString()),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
 // Relations
