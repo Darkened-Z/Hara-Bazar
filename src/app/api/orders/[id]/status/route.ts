@@ -28,7 +28,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   const [updated] = await db
     .update(orders)
-    .set({ status, updatedAt: new Date().toISOString() })
+    .set({ status, updatedAt: new Date() })
     .where(and(eq(orders.id, parseInt(id)), eq(orders.sellerId, seller.id)))
     .returning();
 

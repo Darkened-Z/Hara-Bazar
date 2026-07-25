@@ -32,7 +32,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       ...(stock !== undefined && { stock }),
       ...(status && { status }),
       ...(categoryId && { categoryId }),
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date(),
     })
     .where(and(eq(products.id, parseInt(id)), eq(products.sellerId, seller.id)))
     .returning();
