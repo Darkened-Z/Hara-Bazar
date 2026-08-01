@@ -15,10 +15,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       async authorize(credentials) {
         if (!credentials?.phone || !credentials?.password) return null;
 
+        const phone = (credentials.phone as string).replace(/[\s-]/g, "");
         const [user] = await db
           .select()
           .from(users)
-          .where(eq(users.phone, credentials.phone as string))
+          .where(eq(users.phone, phone))
           .limit(1);
 
         if (!user) return null;

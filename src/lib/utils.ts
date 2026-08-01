@@ -7,8 +7,9 @@ export function formatPrice(rupees: number): string {
 }
 
 export function generateOrderNumber(): string {
-  const num = Math.floor(10000 + Math.random() * 90000);
-  return `PK${num}`;
+  const ts = Date.now().toString(36).slice(-5).toUpperCase();
+  const rand = Math.floor(Math.random() * 1000).toString().padStart(3, "0");
+  return `HB${ts}${rand}`;
 }
 
 export function slugify(text: string): string {

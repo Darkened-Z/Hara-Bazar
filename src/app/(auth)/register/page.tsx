@@ -128,6 +128,8 @@ export default function RegisterPage() {
             placeholder="03XX-XXXXXXX"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
+            pattern="03\d{2}-?\d{7}"
+            maxLength={12}
             required
           />
         </div>

@@ -61,12 +61,13 @@ export async function PUT(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const userId = parseInt(session.user.id);
   const { cartItemId, quantity } = await req.json();
 
   if (quantity <= 0) {
-    await db.delete(cartItems).where(eq(cartItems.id, cartItemId));
+    await db.delete(cartItems).where(and(eq(cartItems.id, cartItemId), eq(cartItems.userId, userId)));
   } else {
-    await db.update(cartItems).set({ quantity }).where(eq(cartItems.id, cartItemId));
+    await db.update(cartItems).set({ quantity }).where(and(eq(cartItems.id, cartItemId), eq(cartItems.userId, userId)));
   }
 
   return NextResponse.json({ success: true });
@@ -78,8 +79,9 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const userId = parseInt(session.user.id);
   const { cartItemId } = await req.json();
-  await db.delete(cartItems).where(eq(cartItems.id, cartItemId));
+  await db.delete(cartItems).where(and(eq(cartItems.id, cartItemId), eq(cartItems.userId, userId)));
 
   return NextResponse.json({ success: true });
 }

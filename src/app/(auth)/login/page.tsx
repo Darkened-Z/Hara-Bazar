@@ -28,7 +28,8 @@ export default function LoginPage() {
     if (res?.error) {
       setError("Invalid phone number or password");
     } else {
-      router.push("/");
+      const sess = await fetch("/api/auth/session").then((r) => r.json());
+      router.push(sess?.user?.role === "seller" ? "/seller" : "/");
       router.refresh();
     }
   }
@@ -58,6 +59,8 @@ export default function LoginPage() {
             placeholder="03XX-XXXXXXX"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
+            pattern="03\d{2}-?\d{7}"
+            maxLength={12}
             required
           />
         </div>

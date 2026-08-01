@@ -21,6 +21,7 @@ export default function CheckoutPage() {
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
+  const [orderError, setOrderError] = useState("");
   const [pageLoading, setPageLoading] = useState(true);
 
   useEffect(() => {
@@ -44,7 +45,7 @@ export default function CheckoutPage() {
   }, [status, session, router]);
 
   const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
-  const deliveryFee = 15000;
+  const deliveryFee = 150;
   const total = subtotal + deliveryFee;
 
   async function placeOrder(e: React.FormEvent) {
@@ -61,6 +62,8 @@ export default function CheckoutPage() {
       const order = await res.json();
       router.push(`/orders/${order.id}`);
     } else {
+      const data = await res.json().catch(() => null);
+      setOrderError(data?.error || "Failed to place order. Please try again.");
       setLoading(false);
     }
   }
@@ -72,6 +75,15 @@ export default function CheckoutPage() {
   return (
     <div className="mx-auto max-w-2xl">
       <h1 className="mb-6 text-2xl font-bold">Checkout</h1>
+
+      {orderError && (
+        <div style={{
+          marginBottom: 16, borderRadius: 'var(--radius-sm)', padding: 12,
+          fontSize: 13, background: 'var(--danger-bg)', color: 'var(--danger)',
+        }}>
+          {orderError}
+        </div>
+      )}
 
       <form onSubmit={placeOrder} className="space-y-6">
         {/* Delivery info */}

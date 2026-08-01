@@ -46,38 +46,49 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
   }
 
-  const sellerId = cart[0].sellerId;
-  const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
-  const deliveryFee = 15000;
-  const total = subtotal + deliveryFee;
+  const deliveryFee = 150;
+  const bySeller = new Map<number, typeof cart>();
+  for (const item of cart) {
+    const list = bySeller.get(item.sellerId) || [];
+    list.push(item);
+    bySeller.set(item.sellerId, list);
+  }
 
-  const [order] = await db
-    .insert(orders)
-    .values({
-      orderNumber: generateOrderNumber(),
-      userId,
-      sellerId,
-      subtotal,
-      deliveryFee,
-      total,
-      deliveryAddress,
-      deliveryPhone,
-      notes,
-    })
-    .returning();
+  const createdOrders = [];
+  for (const [sellerId, sellerItems] of bySeller) {
+    const subtotal = sellerItems.reduce((sum, i) => sum + i.price * i.quantity, 0);
+    const total = subtotal + deliveryFee;
 
-  await db.insert(orderItems).values(
-    cart.map((item) => ({
-      orderId: order.id,
-      productId: item.productId,
-      productName: item.productName,
-      quantity: item.quantity,
-      unitPrice: item.price,
-      totalPrice: item.price * item.quantity,
-    })),
-  );
+    const [order] = await db
+      .insert(orders)
+      .values({
+        orderNumber: generateOrderNumber(),
+        userId,
+        sellerId,
+        subtotal,
+        deliveryFee,
+        total,
+        deliveryAddress,
+        deliveryPhone,
+        notes,
+      })
+      .returning();
+
+    await db.insert(orderItems).values(
+      sellerItems.map((item) => ({
+        orderId: order.id,
+        productId: item.productId,
+        productName: item.productName,
+        quantity: item.quantity,
+        unitPrice: item.price,
+        totalPrice: item.price * item.quantity,
+      })),
+    );
+
+    createdOrders.push(order);
+  }
 
   await db.delete(cartItems).where(eq(cartItems.userId, userId));
 
-  return NextResponse.json(order);
+  return NextResponse.json(createdOrders[0]);
 }
