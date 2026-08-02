@@ -29,7 +29,9 @@ export default function LoginPage() {
       setError("Invalid phone number or password");
     } else {
       const sess = await fetch("/api/auth/session").then((r) => r.json());
-      router.push(sess?.user?.role === "seller" ? "/seller" : "/");
+      const role = sess?.user?.role;
+      const dest = role === "admin" ? "/admin" : role === "seller" ? "/seller" : role === "rider" ? "/rider" : "/";
+      router.push(dest);
       router.refresh();
     }
   }

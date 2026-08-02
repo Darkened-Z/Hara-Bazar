@@ -89,7 +89,10 @@ export const orders = pgTable("orders", {
   paymentMethod: text("payment_method").notNull().default("cod"),
   deliveryAddress: text("delivery_address").notNull(),
   deliveryPhone: text("delivery_phone").notNull(),
+  riderId: integer("rider_id").references(() => riders.id),
   notes: text("notes"),
+  pickedUpAt: timestamp("picked_up_at"),
+  deliveredAt: timestamp("delivered_at"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
@@ -121,6 +124,18 @@ export const reviews = pgTable("reviews", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+export const riders = pgTable("riders", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  vehicleType: varchar("vehicle_type", { length: 20 }).notNull().default("bike"),
+  zone: text("zone").default("Faisalabad"),
+  phone: text("phone"),
+  cnic: text("cnic"),
+  status: varchar("status", { length: 20 }).notNull().default("active"),
+  totalDeliveries: integer("total_deliveries").notNull().default(0),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export const cartItems = pgTable("cart_items", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").notNull().references(() => users.id),
@@ -130,8 +145,14 @@ export const cartItems = pgTable("cart_items", {
 });
 
 // Relations
+export const ridersRelations = relations(riders, ({ one, many }) => ({
+  user: one(users, { fields: [riders.userId], references: [users.id] }),
+  orders: many(orders),
+}));
+
 export const usersRelations = relations(users, ({ many, one }) => ({
   seller: one(sellers, { fields: [users.id], references: [sellers.userId] }),
+  rider: one(riders, { fields: [users.id], references: [riders.userId] }),
   addresses: many(addresses),
   orders: many(orders),
   reviews: many(reviews),
@@ -160,6 +181,7 @@ export const productsRelations = relations(products, ({ one, many }) => ({
 export const ordersRelations = relations(orders, ({ one, many }) => ({
   user: one(users, { fields: [orders.userId], references: [users.id] }),
   seller: one(sellers, { fields: [orders.sellerId], references: [sellers.id] }),
+  rider: one(riders, { fields: [orders.riderId], references: [riders.id] }),
   items: many(orderItems),
 }));
 
