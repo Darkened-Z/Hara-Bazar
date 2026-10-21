@@ -9,9 +9,11 @@
     "lint": "eslint",
     "db:push": "drizzle-kit push",
     "db:seed": "npx tsx src/lib/db/seed.ts",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "db:demo": "tsx demo/build-demo-db.ts"
   },
   "dependencies": {
+    "@electric-sql/pglite": "^0.5.11",
     "bcryptjs": "^3.0.3",
     "drizzle-orm": "^0.45.2",
     "lucide-react": "^1.26.0",
