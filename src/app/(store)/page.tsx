@@ -6,6 +6,7 @@ import { CategoryCard } from "@/components/store/category-card";
 import { FlashCountdown } from "@/components/store/flash-countdown";
 import { formatPrice, discountPercent } from "@/lib/utils";
 import Link from "next/link";
+import { productImage } from "@/lib/product-photos";
 
 export default async function HomePage() {
   const [allCategories, allProducts] = await Promise.all([
@@ -72,7 +73,7 @@ export default async function HomePage() {
               return (
                 <Link key={p.id} href={`/product/${p.slug}`} className="flash-card">
                   <div className="flash-img">
-                    <img src={`/product-image/${p.slug}`} alt={p.name} className="product-img-photo" />
+                    <img src={productImage(p.slug)} alt={p.name} className="product-img-photo" />
                     {discount > 0 && <div className="flash-badge">-{discount}%</div>}
                   </div>
                   <div className="flash-info">

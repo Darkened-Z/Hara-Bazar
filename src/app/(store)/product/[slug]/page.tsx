@@ -6,6 +6,7 @@ import { formatPrice, discountPercent } from "@/lib/utils";
 import { Star, Store, ShoppingCart, Heart } from "lucide-react";
 import { AddToCartButton } from "@/components/store/add-to-cart-button";
 import { ProductCard } from "@/components/store/product-card";
+import { productImage } from "@/lib/product-photos";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -41,7 +42,7 @@ export default async function ProductPage({ params }: Props) {
       <div className="grid gap-6 md:grid-cols-2">
         {/* Image */}
         <div className="relative aspect-square overflow-hidden rounded-2xl" style={{ background: 'var(--surface-alt)' }}>
-          <img src={`/product-image/${product.slug}`} alt={product.name} className="h-full w-full object-cover" />
+          <img src={productImage(product.slug)} alt={product.name} className="h-full w-full object-contain p-6" />
           {discount > 0 && (
             <span className="absolute left-4 top-4 rounded-full px-3 py-1 text-sm font-bold" style={{ background: 'var(--danger)', color: '#fff' }}>
               -{discount}%
@@ -56,7 +57,7 @@ export default async function ProductPage({ params }: Props) {
           )}
           <h1 className="mt-1 text-2xl font-bold md:text-3xl">{product.name}</h1>
 
-          {product.ratingAvg && product.ratingAvg > 0 && (
+          {product.ratingAvg != null && product.ratingAvg > 0 && (
             <div className="mt-2 flex items-center gap-2">
               <div className="flex items-center gap-1">
                 <Star style={{ width: 16, height: 16, fill: 'var(--warning)', color: 'var(--warning)' }} />

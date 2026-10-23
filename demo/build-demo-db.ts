@@ -82,17 +82,17 @@ async function main() {
   }
 
   const productDefs: [string, string, number, number | null, number][] = [
-    ["Dalda Cooking Oil 5L", "oil-ghee", 2850, 3200, 45], ["Guard Super Basmati Rice 5kg", "rice-flour", 1650, 1800, 120],
-    ["Shan Biryani Masala 6-Pack", "spices", 480, 540, 300], ["Tapal Danedar Tea 950g", "beverages", 1350, 1500, 200],
-    ["Lux Soap Bar Pack of 6", "personal-care", 590, 720, 180], ["Sufi Banaspati Ghee 5kg", "oil-ghee", 3200, 3600, 60],
-    ["National Salt 800g x3", "spices", 180, null, 500], ["Surf Excel Washing Powder 3kg", "cleaning", 1250, 1400, 150],
+    ["Dalda Cooking Oil 5L", "oil-ghee", 2850, 3200, 45], ["Pakistan Basmati Long Grain Rice 5kg", "rice-flour", 1650, 1800, 120],
+    ["Shan Karahi Masala", "spices", 140, 160, 300], ["Tapal Danedar Tea 950g", "beverages", 1350, 1500, 200],
+    ["Lux Soap Bar Pack of 6", "personal-care", 590, 720, 180], ["Dalda Banaspati Ghee 1kg", "oil-ghee", 650, 720, 60],
+    ["Shan Chicken White Karahi", "spices", 150, null, 500], ["Surf Excel Washing Powder 3kg", "cleaning", 1250, 1400, 150],
     ["Peek Freans Sooper 12-Pack", "snacks", 720, 780, 250], ["Sunflower Cooking Oil 3L", "oil-ghee", 1650, 1900, 8],
-    ["Olpers Full Cream Milk 1L x6", "dairy", 1440, 1560, 100], ["Nurpur Butter 200g", "dairy", 420, 460, 90],
+    ["Olpers Full Cream Milk 1L x6", "dairy", 1440, 1560, 100], ["Nurpur Full Cream Milk 1L", "dairy", 290, 310, 90],
     ["Nestle Everyday 900g", "beverages", 1180, 1300, 160], ["Lays Classic Large", "snacks", 180, 200, 400],
-    ["Harpic Toilet Cleaner 500ml", "cleaning", 380, 420, 6], ["Habib Cooking Oil 1L", "oil-ghee", 620, 680, 130],
-    ["Sunridge Chakki Atta 10kg", "rice-flour", 1200, 1350, 70], ["Mehran Chili Powder 400g", "spices", 380, 420, 280],
-    ["Rooh Afza 800ml", "beverages", 490, 540, 110], ["Lifebuoy Handwash 500ml", "personal-care", 450, 500, 190],
-    ["Adams Cheese Spread 500g", "dairy", 680, 750, 4], ["Kurkure Masala Munch", "snacks", 80, 100, 600],
+    ["Harpic Toilet Cleaner 500ml", "cleaning", 380, 420, 6], ["Canola Cooking Oil 1L", "oil-ghee", 620, 680, 130],
+    ["Chakki Atta 10kg", "rice-flour", 1200, 1350, 70], ["Mehran Chili Powder 400g", "spices", 380, 420, 280],
+    ["Rooh Afza 800ml", "beverages", 490, 540, 110], ["Lifebuoy Soap Bar", "personal-care", 120, 140, 190],
+    ["Milky Mist Cheese Spread 200g", "dairy", 520, 580, 4], ["Kurkure Masala Munch", "snacks", 80, 100, 600],
     ["Vim Dishwash Bar 300g", "cleaning", 120, 140, 350], ["Falak Basmati Rice 1kg", "rice-flour", 480, 520, 200],
   ];
   const sellerFor = (c: string) => (["rice-flour", "spices"].includes(c) ? sellers[1] : ["dairy", "beverages"].includes(c) ? sellers[2] : sellers[0]);

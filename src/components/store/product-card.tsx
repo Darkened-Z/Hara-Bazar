@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { formatPrice, discountPercent } from "@/lib/utils";
 import type { Product } from "@/types";
+import { productImage } from "@/lib/product-photos";
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -23,7 +24,7 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <Link href={`/product/${product.slug}`} className="product-card">
       <div className="product-img">
-        <img src={`/product-image/${product.slug}`} alt={product.name} className="product-img-photo" />
+        <img src={productImage(product.slug)} alt={product.name} className="product-img-photo" />
         {discount > 0 && (
           <span className="product-badge">-{discount}%</span>
         )}
@@ -57,7 +58,7 @@ export function ProductCard({ product }: { product: Product }) {
             </div>
           )}
         </div>
-        {product.ratingAvg && product.ratingAvg > 0 && (
+        {product.ratingAvg != null && product.ratingAvg > 0 && (
           <div className="product-rating">
             <StarRating rating={product.ratingAvg} />
             <span>{product.ratingAvg} ({((product.totalSold || 0) / 1000).toFixed(1)}k sold)</span>

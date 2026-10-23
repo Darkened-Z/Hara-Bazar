@@ -39,7 +39,7 @@ export function Footer() {
         maxWidth: 1280, margin: "24px auto 0", paddingTop: 16,
         borderTop: "1px solid #2A2A2E", fontSize: 11, color: "#52525B",
       }}>
-        &copy; 2026 Hara Bazaar. All rights reserved.
+        &copy; 2026 Hara Bazaar. All rights reserved. Product photos: <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener noreferrer">Open Food Facts</a> contributors, CC BY-SA.
       </div>
       <style>{`
         .desktop-footer { display: none; }

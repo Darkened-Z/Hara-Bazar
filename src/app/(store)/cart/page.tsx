@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Minus, Plus, Trash2, ShoppingCart } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
+import { productImage } from "@/lib/product-photos";
 
 interface CartEntry {
   id: number;
@@ -89,7 +90,7 @@ export default function CartPage() {
             key={item.id}
             className="card flex items-center gap-4 p-4"
           >
-            <img src={`/product-image/${item.productSlug}`} alt={item.productName} className="h-16 w-16 shrink-0 rounded-lg object-cover" />
+            <img src={productImage(item.productSlug)} alt={item.productName} className="h-16 w-16 shrink-0 rounded-lg object-cover" />
             <div className="flex-1">
               <Link
                 href={`/product/${item.productSlug}`}
