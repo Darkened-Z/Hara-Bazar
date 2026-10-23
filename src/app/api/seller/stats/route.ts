@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { sellers, orders, products } from "@/lib/db/schema";
 import { eq, sum, count, sql } from "drizzle-orm";
+import { dailyRevenue, lowStock, recentOrders, statusCounts, topProducts } from "@/lib/dashboard";
 
 export async function GET() {
   const session = await auth();
@@ -45,5 +46,10 @@ export async function GET() {
     totalRevenue: Number(orderStats.totalRevenue) || 0,
     totalProducts: productStats.totalProducts || 0,
     pendingOrders: pendingOrders.count || 0,
+    daily: await dailyRevenue(eq(orders.sellerId, seller.id)),
+    statusCounts: await statusCounts(eq(orders.sellerId, seller.id)),
+    recentOrders: await recentOrders(eq(orders.sellerId, seller.id)),
+    topProducts: await topProducts(seller.id),
+    lowStock: await lowStock(seller.id),
   });
 }

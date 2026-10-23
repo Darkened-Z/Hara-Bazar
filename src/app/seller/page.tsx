@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Package, ShoppingBag, TrendingUp, AlertCircle } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
+import { DailyChart, RankedList, RecentOrders, StatusBreakdown, type DayPoint, type RecentOrder } from "@/components/dashboard/panels";
 
 interface Stats {
   storeName: string;
@@ -10,6 +11,11 @@ interface Stats {
   totalRevenue: number;
   totalProducts: number;
   pendingOrders: number;
+  daily: DayPoint[];
+  statusCounts: Record<string, number>;
+  recentOrders: RecentOrder[];
+  topProducts: { name: string; units: number; revenue: number }[];
+  lowStock: { name: string; stock: number }[];
 }
 
 export default function SellerDashboard() {
@@ -51,6 +57,17 @@ export default function SellerDashboard() {
             </div>
           </div>
         ))}
+      </div>
+      <div className="mt-6 grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2"><DailyChart data={stats.daily} /></div>
+        <StatusBreakdown counts={stats.statusCounts} />
+      </div>
+      <div className="mt-6 grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2"><RecentOrders rows={stats.recentOrders} showStore={false} /></div>
+        <div className="space-y-6">
+          <RankedList title="Best sellers" rows={stats.topProducts.map((p) => ({ label: p.name, sub: `${p.units} sold`, value: formatPrice(p.revenue) }))} />
+          <RankedList title="Low stock" rows={stats.lowStock.map((p) => ({ label: p.name, sub: "Restock soon", value: `${p.stock} left` }))} />
+        </div>
       </div>
     </div>
   );

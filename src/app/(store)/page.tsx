@@ -72,7 +72,7 @@ export default async function HomePage() {
               return (
                 <Link key={p.id} href={`/product/${p.slug}`} className="flash-card">
                   <div className="flash-img">
-                    <div style={{ fontSize: 28, fontWeight: 800, color: "#C8C8BE", opacity: 0.5 }}>{p.name[0]}</div>
+                    <img src={`/product-image/${p.slug}`} alt={p.name} className="product-img-photo" />
                     {discount > 0 && <div className="flash-badge">-{discount}%</div>}
                   </div>
                   <div className="flash-info">

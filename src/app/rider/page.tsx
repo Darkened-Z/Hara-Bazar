@@ -3,12 +3,15 @@
 import { useEffect, useState } from "react";
 import { Bike, Package, Clock, Truck } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
+import { DailyChart, RecentOrders, type DayPoint, type RecentOrder } from "@/components/dashboard/panels";
 
 interface Stats {
   totalDeliveries: number;
   todayDeliveries: number;
   availableOrders: number;
   activeDeliveries: number;
+  daily: DayPoint[];
+  recentOrders: RecentOrder[];
 }
 
 export default function RiderDashboard() {
@@ -50,6 +53,10 @@ export default function RiderDashboard() {
             </div>
           </div>
         ))}
+      </div>
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        <DailyChart data={stats.daily} metric="orders" title="Deliveries · last 14 days" />
+        <RecentOrders rows={stats.recentOrders} />
       </div>
     </div>
   );

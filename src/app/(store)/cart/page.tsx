@@ -89,9 +89,7 @@ export default function CartPage() {
             key={item.id}
             className="card flex items-center gap-4 p-4"
           >
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg text-2xl" style={{ background: 'var(--surface-alt)' }}>
-              📦
-            </div>
+            <img src={`/product-image/${item.productSlug}`} alt={item.productName} className="h-16 w-16 shrink-0 rounded-lg object-cover" />
             <div className="flex-1">
               <Link
                 href={`/product/${item.productSlug}`}

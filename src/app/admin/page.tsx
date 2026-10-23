@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Users, Store, Bike, ShoppingBag, TrendingUp, Package } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
+import { DailyChart, RankedList, RecentOrders, StatusBreakdown, type DayPoint, type RecentOrder } from "@/components/dashboard/panels";
 
 interface Stats {
   totalUsers: number;
@@ -11,6 +12,11 @@ interface Stats {
   totalOrders: number;
   totalRevenue: number;
   activeProducts: number;
+  daily: DayPoint[];
+  statusCounts: Record<string, number>;
+  recentOrders: RecentOrder[];
+  topSellers: { store: string; orders: number; revenue: number }[];
+  topProducts: { name: string; units: number; revenue: number }[];
 }
 
 export default function AdminDashboard() {
@@ -54,6 +60,17 @@ export default function AdminDashboard() {
             </div>
           </div>
         ))}
+      </div>
+      <div className="mt-6 grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2"><DailyChart data={stats.daily} /></div>
+        <StatusBreakdown counts={stats.statusCounts} />
+      </div>
+      <div className="mt-6 grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2"><RecentOrders rows={stats.recentOrders} /></div>
+        <div className="space-y-6">
+          <RankedList title="Top stores" rows={stats.topSellers.map((s) => ({ label: s.store, sub: `${s.orders} delivered orders`, value: formatPrice(s.revenue) }))} />
+          <RankedList title="Best sellers" rows={stats.topProducts.map((p) => ({ label: p.name, sub: `${p.units} sold`, value: formatPrice(p.revenue) }))} />
+        </div>
       </div>
     </div>
   );

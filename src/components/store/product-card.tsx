@@ -23,7 +23,7 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <Link href={`/product/${product.slug}`} className="product-card">
       <div className="product-img">
-        <span className="product-img-letter">{product.name[0]}</span>
+        <img src={`/product-image/${product.slug}`} alt={product.name} className="product-img-photo" />
         {discount > 0 && (
           <span className="product-badge">-{discount}%</span>
         )}

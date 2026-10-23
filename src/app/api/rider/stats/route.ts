@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { riders, orders } from "@/lib/db/schema";
 import { eq, count, sql, and, isNull, ne } from "drizzle-orm";
+import { dailyRevenue, recentOrders } from "@/lib/dashboard";
 
 export async function GET() {
   const session = await auth();
@@ -42,5 +43,7 @@ export async function GET() {
     todayDeliveries: todayStats.count || 0,
     availableOrders: available.count || 0,
     activeDeliveries: active.count || 0,
+    daily: await dailyRevenue(and(eq(orders.riderId, rider.id), eq(orders.status, "delivered"))),
+    recentOrders: await recentOrders(eq(orders.riderId, rider.id)),
   });
 }

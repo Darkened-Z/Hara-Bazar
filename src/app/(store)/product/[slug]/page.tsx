@@ -41,9 +41,7 @@ export default async function ProductPage({ params }: Props) {
       <div className="grid gap-6 md:grid-cols-2">
         {/* Image */}
         <div className="relative aspect-square overflow-hidden rounded-2xl" style={{ background: 'var(--surface-alt)' }}>
-          <div className="flex h-full items-center justify-center text-8xl" style={{ color: 'var(--text-muted)' }}>
-            📦
-          </div>
+          <img src={`/product-image/${product.slug}`} alt={product.name} className="h-full w-full object-cover" />
           {discount > 0 && (
             <span className="absolute left-4 top-4 rounded-full px-3 py-1 text-sm font-bold" style={{ background: 'var(--danger)', color: '#fff' }}>
               -{discount}%
